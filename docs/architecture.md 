@@ -1,0 +1,300 @@
+# System Architecture
+
+## Overview
+
+The Logic Query Engine follows a modular architecture.
+
+The goal is to separate:
+
+- parsing,
+- data representation,
+- query execution,
+- testing.
+
+This mirrors professional software engineering practices.
+
+---
+
+# Architecture Diagram
+
+
+```
+                 User
+
+                  |
+
+                  v
+
+            Query Input
+
+                  |
+
+                  v
+
+              Parser
+
+                  |
+
+                  v
+
+       Logical Query Structure
+
+                  |
+
+                  v
+
+        Relational Executor
+
+                  |
+
+                  v
+
+             Relation Data
+
+                  |
+
+                  v
+
+              Result
+
+```
+
+---
+
+# Component Design
+
+## Parser
+
+
+Responsible for:
+
+- reading query text,
+- identifying commands,
+- extracting conditions.
+
+
+Input:
+
+```
+SELECT name WHERE grade > 80
+```
+
+
+Output:
+
+```
+Query Object
+
+```
+
+---
+
+# Relation Module
+
+
+Responsible for representing database tables.
+
+
+Handles:
+
+- rows,
+- columns,
+- tuples,
+- attributes.
+
+
+Concept:
+
+```
+Relation = Set of Tuples
+
+```
+
+---
+
+# Executor Module
+
+
+Responsible for performing operations.
+
+
+Examples:
+
+
+Selection:
+
+```
+Filter rows
+
+```
+
+
+Projection:
+
+```
+Choose columns
+
+```
+
+
+---
+
+# Data Flow
+
+
+Example:
+
+
+CSV:
+
+
+```
+students.csv
+
+```
+
+contains:
+
+
+```
+Alice,95
+Bob,72
+Charlie,88
+
+```
+
+
+↓
+
+Loaded into:
+
+```
+Relation
+
+```
+
+
+↓
+
+Query:
+
+
+```
+grade > 80
+
+```
+
+
+↓
+
+Predicate evaluation:
+
+
+```
+TRUE
+FALSE
+TRUE
+
+```
+
+
+↓
+
+Result:
+
+
+```
+Alice
+Charlie
+
+```
+
+---
+
+# Design Principles
+
+
+## Separation of Concerns
+
+
+Each component has one responsibility.
+
+
+Parser:
+
+Understands queries.
+
+
+Relation:
+
+Stores information.
+
+
+Executor:
+
+Performs operations.
+
+
+---
+
+# Extensibility
+
+
+The design allows future features:
+
+
+- JOIN operations
+- indexing
+- optimisation
+- multiple tables
+- additional operators
+
+
+---
+
+# Relationship To Real Database Systems
+
+
+Industrial database engines follow similar concepts:
+
+
+```
+PostgreSQL
+
+MySQL
+
+SQLite
+
+Oracle
+
+
+all contain:
+
+Parser
+
+↓
+
+Planner
+
+↓
+
+Executor
+
+↓
+
+Storage
+
+```
+
+This project implements a simplified version of the logical execution layer.
+
+---
+
+# Engineering Reflection
+
+
+The goal is not to recreate a production database.
+
+The goal is to understand the principles that make databases possible.
+
+A strong engineer understands the abstractions underneath the tools they use.

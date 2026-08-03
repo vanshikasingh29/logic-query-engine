@@ -1,0 +1,72 @@
+# Logic Query Engine Examples
+
+
+================================
+
+Example 1
+
+================================
+
+
+Input:
+
+SELECT name WHERE grade > 80
+
+
+Meaning:
+
+
+Return students where:
+
+grade is greater than 80.
+
+
+
+Relational Algebra:
+
+
+π name
+(
+σ grade > 80
+(Student)
+)
+
+
+
+================================
+
+Example 2
+
+================================
+
+
+Future Extension:
+
+SELECT name WHERE grade < 60
+
+
+
+Relational Algebra:
+
+
+π name
+(
+σ grade < 60
+(Student)
+)
+
+
+
+================================
+
+Example 3
+
+================================
+
+
+Future Extension:
+
+
+SELECT name WHERE grade = 100
+
+

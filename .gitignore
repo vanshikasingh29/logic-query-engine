@@ -1,0 +1,24 @@
+# Compiled binaries
+*.out
+*.exe
+
+# Object files
+*.o
+
+# Debug files
+*.dSYM/
+
+# Build folders
+build/
+
+# IDE files
+.vscode/
+
+.idea/
+
+# Temporary files
+*.tmp
+*.log
+
+# Test binaries
+query_tests
