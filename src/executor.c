@@ -8,11 +8,6 @@ File:
 executor.c
 
 
-Version:
-
-2.2
-
-
 Purpose:
 
 Executes relational algebra operations.
@@ -23,7 +18,11 @@ Executes relational algebra operations.
 
 
 #include <stdio.h>
+
 #include <string.h>
+
+#include <stdlib.h>
+
 
 
 #include "../include/executor.h"
@@ -33,13 +32,6 @@ Executes relational algebra operations.
 
 
 
-/*
-============================================================
-
-Evaluate Predicate
-
-============================================================
-*/
 
 int evaluate_predicate(
         Tuple tuple,
@@ -85,19 +77,6 @@ int evaluate_predicate(
 
 
 
-
-/*
-============================================================
-
-Selection
-
-σ condition(Relation)
-
-
-============================================================
-*/
-
-
 Relation selection(
         Relation relation,
         Predicate predicate
@@ -112,17 +91,18 @@ Relation selection(
 
 
 
-    for(int i=0;
-        i<relation.row_count;
+    for(int i = 0;
+        i < relation.row_count;
         i++)
     {
 
 
         if(
-        evaluate_predicate(
-            relation.rows[i],
-            predicate
-        ))
+            evaluate_predicate(
+                relation.rows[i],
+                predicate
+            )
+        )
         {
 
 
@@ -131,6 +111,7 @@ Relation selection(
                 relation.rows[i].name,
                 relation.rows[i].grade
             );
+
 
         }
 
@@ -149,23 +130,25 @@ Relation selection(
 
 
 
-/*
-============================================================
-
-Projection
-
-π attribute(Relation)
-
-
-============================================================
-*/
-
-
 Relation projection(
         Relation relation,
         char* column
 )
 {
+
+
+    /*
+    Currently the engine supports
+    full tuple projection.
+
+    Future versions will support
+    dynamic column selection.
+
+    */
+
+
+    (void)column;
+
 
 
     Relation result =
@@ -175,8 +158,8 @@ Relation projection(
 
 
 
-    for(int i=0;
-        i<relation.row_count;
+    for(int i = 0;
+        i < relation.row_count;
         i++)
     {
 
@@ -203,27 +186,6 @@ Relation projection(
 
 
 
-/*
-============================================================
-
-Legacy Query Execution
-
-
-Query
-
-↓
-
-Selection
-
-↓
-
-Projection
-
-
-============================================================
-*/
-
-
 Relation execute_query(
         Relation relation,
         Query query
@@ -239,15 +201,10 @@ Relation execute_query(
 
 
 
-    Relation projected =
-        projection(
-            filtered,
-            query.projection
-        );
-
-
-
-    return projected;
+    return projection(
+        filtered,
+        query.projection
+    );
 
 }
 
@@ -257,36 +214,6 @@ Relation execute_query(
 
 
 
-
-
-
-/*
-============================================================
-
-AST Execution
-
-
-Currently supports:
-
-
-SELECT name WHERE grade > value
-
-
-AST:
-
-SELECT
-
- |
-
-WHERE
-
- |
-
-comparison
-
-
-============================================================
-*/
 
 
 Relation execute_ast(
@@ -337,15 +264,18 @@ Relation execute_ast(
 
 
 
-        switch(
-        comparison->type)
+
+
+        switch(comparison->type)
         {
 
 
             case AST_GREATER_THAN:
 
+
                 predicate.operator =
                     OP_GREATER_THAN;
+
 
                 break;
 
@@ -353,8 +283,10 @@ Relation execute_ast(
 
             case AST_LESS_THAN:
 
+
                 predicate.operator =
                     OP_LESS_THAN;
+
 
                 break;
 
@@ -362,10 +294,13 @@ Relation execute_ast(
 
             default:
 
+
                 predicate.operator =
                     OP_EQUAL;
 
+
         }
+
 
 
 
@@ -383,68 +318,13 @@ Relation execute_ast(
             root->left->value
         );
 
+
     }
+
+
 
 
 
     return relation;
-
-}
-/*
-============================================================
-
-Expression Execution
-
-
-Executes Boolean predicate trees.
-
-
-============================================================
-*/
-
-
-Relation execute_expression(
-        Relation relation,
-        ExpressionNode* expression
-)
-{
-
-
-    Relation result =
-        create_relation(
-            "Expression Result"
-        );
-
-
-
-    for(int i=0;
-        i < relation.row_count;
-        i++)
-    {
-
-
-        if(
-        evaluate_expression(
-            expression,
-            relation.rows[i].grade
-        ))
-        {
-
-
-            add_tuple(
-                &result,
-                relation.rows[i].name,
-                relation.rows[i].grade
-            );
-
-
-        }
-
-
-    }
-
-
-
-    return result;
 
 }

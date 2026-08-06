@@ -29,6 +29,21 @@ Executor
 */
 
 
+/*
+============================================================
+
+Logic Query Engine
+
+planner.h
+
+
+Logical Query Planning Layer
+
+
+============================================================
+*/
+
+
 #ifndef PLANNER_H
 #define PLANNER_H
 
@@ -37,13 +52,19 @@ Executor
 
 
 
+
+
 typedef struct
 {
+
 
     ASTNode* root;
 
 
+
 } QueryPlan;
+
+
 
 
 
@@ -53,9 +74,11 @@ QueryPlan create_plan(
 
 
 
+
 void print_plan(
         QueryPlan plan
 );
+
 
 
 

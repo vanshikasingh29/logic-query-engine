@@ -133,6 +133,53 @@ This project applies those ideas by creating a working query processing system.
 
 ---
 
+---
+
+# Database Engineering Features
+
+
+This project has evolved into a miniature relational database engine.
+
+
+Implemented components:
+
+
+✓ CSV storage layer
+
+✓ Relation representation
+
+✓ SQL-style lexer
+
+✓ Query parser
+
+✓ Abstract Syntax Trees
+
+✓ Logical query planning
+
+✓ Relational algebra execution
+
+✓ Predicate evaluation
+
+✓ Query optimisation framework
+
+
+
+The architecture follows principles used in:
+
+
+- PostgreSQL
+- SQLite
+- MySQL query engines
+
+
+
+The purpose is not to recreate a production database,
+but to understand the fundamental engineering ideas
+behind modern database systems.
+
+---
+
+
 # Engineering Question
 
 The central question behind this project:
