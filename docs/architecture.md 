@@ -1,76 +1,71 @@
-# System Architecture
+# Logic Query Engine Architecture
+
 
 ## Overview
 
-The Logic Query Engine follows a modular architecture.
 
-The goal is to separate:
+Logic Query Engine is designed as a simplified relational database system.
 
-- parsing,
-- data representation,
-- query execution,
-- testing.
+The architecture separates each stage of query processing into independent modules.
 
-This mirrors professional software engineering practices.
 
----
-
-# Architecture Diagram
+The system follows:
 
 
 ```
-                 User
+Query Input
 
-                  |
+↓
 
-                  v
+Lexical Analysis
 
-            Query Input
+↓
 
-                  |
+Parsing
 
-                  v
+↓
 
-              Parser
+Abstract Syntax Tree
 
-                  |
+↓
 
-                  v
+Query Planning
 
-       Logical Query Structure
+↓
 
-                  |
+Optimisation
 
-                  v
+↓
 
-        Relational Executor
+Execution
 
-                  |
+↓
 
-                  v
-
-             Relation Data
-
-                  |
-
-                  v
-
-              Result
-
+Result
 ```
+
 
 ---
 
-# Component Design
-
-## Parser
+# Component Architecture
 
 
-Responsible for:
+## 1. Lexer
 
-- reading query text,
-- identifying commands,
-- extracting conditions.
+
+File:
+
+```
+src/lexer.c
+```
+
+
+Responsibility:
+
+Convert raw query text into tokens.
+
+
+Example:
 
 
 Input:
@@ -82,194 +77,440 @@ SELECT name WHERE grade > 80
 
 Output:
 
+
 ```
+SELECT
+
+IDENTIFIER(name)
+
+WHERE
+
+IDENTIFIER(grade)
+
+>
+
+NUMBER(80)
+```
+
+
+The lexer performs the first stage of query processing.
+
+
+---
+
+# 2. Parser
+
+
+Files:
+
+
+```
+src/parser.c
+
+include/parser.h
+```
+
+
+Responsibility:
+
+
+Transform tokens into a structured query representation.
+
+
+Pipeline:
+
+
+```
+Tokens
+
+↓
+
+Parser
+
+↓
+
 Query Object
 
-```
+↓
 
----
-
-# Relation Module
-
-
-Responsible for representing database tables.
-
-
-Handles:
-
-- rows,
-- columns,
-- tuples,
-- attributes.
-
-
-Concept:
-
-```
-Relation = Set of Tuples
-
-```
-
----
-
-# Executor Module
-
-
-Responsible for performing operations.
-
-
-Examples:
-
-
-Selection:
-
-```
-Filter rows
-
-```
-
-
-Projection:
-
-```
-Choose columns
-
+Abstract Syntax Tree
 ```
 
 
 ---
 
-# Data Flow
+# 3. Abstract Syntax Tree
+
+
+Files:
+
+
+```
+src/ast.c
+
+include/ast.h
+```
+
+
+The AST represents the logical meaning of the query.
 
 
 Example:
 
 
-CSV:
+```
+SELECT
+
+|
+
+PROJECTION(name)
+
+|
+
+WHERE
+
+|
+
+grade > 80
+```
+
+
+The tree structure allows future support for:
+
+- multiple conditions
+- joins
+- complex expressions
+
+
+---
+
+# 4. Query Planner
+
+
+Files:
 
 
 ```
-students.csv
-
+src/planner.c
 ```
 
-contains:
+
+Responsibility:
+
+
+Convert the AST into an executable logical plan.
+
+
+Example:
+
+
+```
+AST
+
+↓
+
+Selection Operation
+
+↓
+
+Projection Operation
+
+↓
+
+Execution Plan
+```
+
+
+---
+
+# 5. Optimiser
+
+
+Files:
+
+
+```
+src/optimiser.c
+```
+
+
+Responsibility:
+
+
+Analyse the query plan.
+
+
+Current functionality:
+
+- cost estimation framework
+- optimisation pipeline
+
+
+Future improvements:
+
+- predicate pushdown
+- join optimisation
+- indexing decisions
+
+
+---
+
+# 6. Storage Layer
+
+
+Files:
+
+
+```
+src/storage.c
+```
+
+
+Responsibility:
+
+
+Load external data into memory.
+
+
+Current format:
+
+
+```
+CSV
+```
+
+Example:
 
 
 ```
 Alice,95
 Bob,72
 Charlie,88
-
 ```
 
 
-↓
+Converted into:
 
-Loaded into:
 
 ```
 Relation
 
+↓
+
+Tuple Collection
 ```
 
 
-↓
+---
+
+# 7. Relation Engine
+
+
+Files:
+
+
+```
+src/relation.c
+```
+
+
+Database theory model:
+
+
+```
+Relation = Set of Tuples
+```
+
+
+Example:
+
+
+```
+Student(Name,Grade)
+```
+
+
+Stored as:
+
+
+```
+{
+(Alice,95),
+
+(Bob,72),
+
+(Charlie,88)
+}
+```
+
+
+---
+
+# 8. Execution Engine
+
+
+Files:
+
+
+```
+src/executor.c
+```
+
+
+Responsibility:
+
+
+Execute relational operations.
+
+
+Implemented operations:
+
+
+## Selection
+
+
+Filtering tuples:
+
+
+```
+σ condition(Relation)
+```
+
+
+Example:
+
+
+```
+grade > 80
+```
+
+
+---
+
+## Projection
+
+
+Selecting attributes:
+
+
+```
+π attribute(Relation)
+```
+
+
+Example:
+
+
+```
+name
+```
+
+
+---
+
+# Complete Execution Flow
+
+
+Example:
+
 
 Query:
 
 
 ```
-grade > 80
-
+SELECT name WHERE grade > 80
 ```
 
+
+Execution:
+
+
+```
+User Query
 
 ↓
 
-Predicate evaluation:
-
-
-```
-TRUE
-FALSE
-TRUE
-
-```
-
+Lexer
 
 ↓
 
-Result:
+Tokens
 
+↓
 
+Parser
+
+↓
+
+AST
+
+↓
+
+Logical Plan
+
+↓
+
+Optimizer
+
+↓
+
+Executor
+
+↓
+
+Relation Result
 ```
-Alice
-Charlie
 
-```
 
 ---
 
 # Design Principles
 
 
-## Separation of Concerns
+## Modularity
 
 
 Each component has one responsibility.
 
 
-Parser:
+This improves:
 
-Understands queries.
-
-
-Relation:
-
-Stores information.
-
-
-Executor:
-
-Performs operations.
+- maintainability
+- testing
+- future expansion
 
 
 ---
 
-# Extensibility
+## Extensibility
 
 
-The design allows future features:
+The architecture allows future database features:
 
 
-- JOIN operations
-- indexing
-- optimisation
-- multiple tables
-- additional operators
+- JOIN processing
+- indexes
+- transactions
+- query caching
+- persistent storage
 
 
 ---
 
-# Relationship To Real Database Systems
+# Relationship To Industry Databases
 
 
-Industrial database engines follow similar concepts:
+Professional systems such as:
+
+- PostgreSQL
+- SQLite
+- MySQL
+
+
+use similar conceptual stages:
 
 
 ```
-PostgreSQL
-
-MySQL
-
-SQLite
-
-Oracle
-
-
-all contain:
-
 Parser
 
 ↓
@@ -278,23 +519,28 @@ Planner
 
 ↓
 
+Optimizer
+
+↓
+
 Executor
 
 ↓
 
 Storage
-
 ```
 
-This project implements a simplified version of the logical execution layer.
+
+This project implements a simplified educational version of that architecture.
+
 
 ---
 
 # Engineering Reflection
 
 
-The goal is not to recreate a production database.
+The purpose of this project is not to replace existing database systems.
 
-The goal is to understand the principles that make databases possible.
+The purpose is to understand the engineering principles behind them.
 
-A strong engineer understands the abstractions underneath the tools they use.
+A strong software engineer understands not only how to use abstractions, but how those abstractions are constructed.
