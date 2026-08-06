@@ -3,20 +3,47 @@
 
 Logic Query Engine
 
-Main Demonstration
+File:
+
+main.c
 
 
-Runs:
+Purpose:
 
-CSV Data
+Complete demonstration pipeline.
+
+
+Architecture:
+
+CSV / Relation Data
 
 ↓
 
-Relation
+SQL Query
 
 ↓
 
-Query Parser
+Lexer
+
+↓
+
+Tokens
+
+↓
+
+Parser
+
+↓
+
+Abstract Syntax Tree
+
+↓
+
+Query Planner
+
+↓
+
+Relational Algebra
 
 ↓
 
@@ -34,11 +61,17 @@ Result
 #include <stdio.h>
 
 
+
 #include "../include/relation.h"
 
 #include "../include/parser.h"
 
 #include "../include/executor.h"
+
+#include "../include/planner.h"
+
+#include "../include/ast.h"
+
 
 
 
@@ -49,22 +82,36 @@ int main()
 
 
     printf(
-        "\nLogic Query Engine\n"
+        "\n=================================\n"
     );
-
 
     printf(
-        "==================\n\n"
+        "       Logic Query Engine\n"
     );
+
+    printf(
+        "=================================\n\n"
+    );
+
 
 
 
 
     /*
-    Create database relation
+    ========================================================
+
+    STEP 1
+
+    Create Database Relation
+
+
+    Mathematical representation:
+
 
     Student(Name, Grade)
 
+
+    ========================================================
     */
 
 
@@ -76,9 +123,29 @@ int main()
 
 
 
-    /*
-    Insert sample data
 
+
+    /*
+    ========================================================
+
+    STEP 2
+
+    Insert Tuples
+
+
+    Relation:
+
+
+    Student =
+
+    {
+        (Alice,95),
+        (Bob,72),
+        (Charlie,88)
+    }
+
+
+    ========================================================
     */
 
 
@@ -104,8 +171,15 @@ int main()
 
 
 
+
+
     printf(
-        "Original Relation:"
+        "Original Relation\n"
+    );
+
+
+    printf(
+        "-----------------\n"
     );
 
 
@@ -117,9 +191,23 @@ int main()
 
 
 
-    /*
-    User Query
 
+
+    /*
+    ========================================================
+
+    STEP 3
+
+    SQL Query
+
+
+    Example:
+
+
+    SELECT name WHERE grade > 80
+
+
+    ========================================================
     */
 
 
@@ -129,10 +217,62 @@ int main()
 
 
 
+
+    printf(
+        "\nInput Query\n"
+    );
+
+
+    printf(
+        "------------\n"
+    );
+
+
+    printf(
+        "%s\n",
+        query_text
+    );
+
+
+
+
+
+
+
+
+
+    /*
+    ========================================================
+
+    STEP 4
+
+    Parsing
+
+
+    SQL
+
+    ↓
+
+    Tokens
+
+    ↓
+
+    Query Structure
+
+    ↓
+
+    AST
+
+
+    ========================================================
+    */
+
+
     Query query =
         parse_query(
             query_text
         );
+
 
 
 
@@ -145,16 +285,115 @@ int main()
 
 
 
-    /*
-    Execute query
 
+    /*
+    ========================================================
+
+    STEP 5
+
+    Display Abstract Syntax Tree
+
+
+    ========================================================
     */
 
 
-    Relation result =
-        execute_query(
+    printf(
+        "\nAbstract Syntax Tree\n"
+    );
+
+
+    printf(
+        "--------------------\n"
+    );
+
+
+
+    print_ast(
+        get_latest_ast(),
+        0
+    );
+
+
+
+
+
+
+
+
+
+    /*
+    ========================================================
+
+    STEP 6
+
+    Query Planning
+
+
+    Database systems do not directly execute
+    parser output.
+
+    They create an execution plan.
+
+
+    AST
+
+    ↓
+
+    Logical Plan
+
+
+    ========================================================
+    */
+
+
+    QueryPlan plan =
+        create_plan(
+            get_latest_ast()
+        );
+
+
+
+
+
+    print_plan(
+        plan
+    );
+
+
+
+
+
+
+
+
+    /*
+    ========================================================
+
+    STEP 7
+
+    Execute AST
+
+
+    Logical Plan
+
+    ↓
+
+    Relational Algebra
+
+    ↓
+
+    Result
+
+
+    ========================================================
+    */
+
+
+    Relation ast_result =
+        execute_ast(
             students,
-            query
+            plan.root
         );
 
 
@@ -162,14 +401,74 @@ int main()
 
 
     printf(
-        "Query Result:"
+        "\nAST Execution Result\n"
+    );
+
+
+    printf(
+        "--------------------\n"
     );
 
 
     print_relation(
-        &result
+        &ast_result
     );
 
+
+
+
+
+
+
+
+
+    /*
+    ========================================================
+
+    STEP 8
+
+    Legacy Execution Test
+
+
+    Keeps compatibility with
+    previous engine.
+
+
+    ========================================================
+    */
+
+
+    Relation old_result =
+        execute_query(
+            students,
+            query
+        );
+
+
+
+    printf(
+        "\nLegacy Execution Result\n"
+    );
+
+
+    printf(
+        "-----------------------\n"
+    );
+
+
+    print_relation(
+        &old_result
+    );
+
+
+
+
+
+
+
+    printf(
+        "\nQuery completed successfully.\n"
+    );
 
 
 

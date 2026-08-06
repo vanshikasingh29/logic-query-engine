@@ -589,6 +589,45 @@ The objective is to understand the principles that make databases possible.
 
 ---
 
+## Internal Query Pipeline
+
+The project intentionally mirrors the internal architecture used by modern database systems.
+
+```
+SQL Query
+
+↓
+
+Lexical Analysis
+
+↓
+
+Token Stream
+
+↓
+
+Parser
+
+↓
+
+Abstract Syntax Tree
+
+↓
+
+Logical Query Plan
+
+↓
+
+Execution Engine
+
+↓
+
+Result Relation
+```
+Although simplified for educational purposes, this architecture reflects the same conceptual stages used in production database engines.
+
+---
+
 # Engineering Principle
 
 

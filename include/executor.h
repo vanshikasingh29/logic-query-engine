@@ -10,22 +10,34 @@ executor.h
 
 Purpose:
 
-Defines the query execution layer.
+Execution layer.
 
-The executor transforms:
+Version 2.2
 
-Query
+The executor now supports:
 
-+
+Query Structure
 
-Relation
+and
 
-into:
+Abstract Syntax Tree
+
+
+Architecture:
+
+AST
+
+↓
+
+Planner
+
+↓
+
+Relational Algebra
+
+↓
 
 Result Relation
-
-
-This represents relational algebra execution.
 
 
 ============================================================
@@ -36,9 +48,10 @@ This represents relational algebra execution.
 #define EXECUTOR_H
 
 
-#include "relation.h"
 
+#include "relation.h"
 #include "parser.h"
+#include "ast.h"
 
 
 
@@ -50,10 +63,6 @@ This represents relational algebra execution.
 Predicate Evaluation
 
 
-Checks whether a tuple satisfies
-a logical condition.
-
-
 Example:
 
 grade > 80
@@ -61,7 +70,6 @@ grade > 80
 
 ============================================================
 */
-
 
 int evaluate_predicate(
         Tuple tuple,
@@ -75,21 +83,16 @@ int evaluate_predicate(
 /*
 ============================================================
 
-Selection Operation
+Selection
 
 
 Relational Algebra:
 
-
 σ condition(Relation)
-
-
-Filters tuples.
 
 
 ============================================================
 */
-
 
 Relation selection(
         Relation relation,
@@ -103,21 +106,16 @@ Relation selection(
 /*
 ============================================================
 
-Projection Operation
+Projection
 
 
 Relational Algebra:
 
-
 π attribute(Relation)
-
-
-Chooses columns.
 
 
 ============================================================
 */
-
 
 Relation projection(
         Relation relation,
@@ -134,33 +132,38 @@ Relation projection(
 
 Execute Query
 
-
-Complete pipeline:
-
-Query
-
-↓
-
-Selection
-
-↓
-
-Projection
-
-↓
-
-Result
-
+Legacy interface.
 
 ============================================================
 */
-
 
 Relation execute_query(
         Relation relation,
         Query query
 );
 
+
+
+
+
+/*
+============================================================
+
+NEW
+
+Execute AST
+
+
+The future database engine
+will use this.
+
+============================================================
+*/
+
+Relation execute_ast(
+        Relation relation,
+        ASTNode* root
+);
 
 
 

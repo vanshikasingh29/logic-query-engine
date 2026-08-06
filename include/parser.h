@@ -10,15 +10,21 @@ parser.h
 
 Purpose:
 
-Defines the internal representation of queries.
+Defines query parsing structures.
 
-The parser converts human-readable commands into
-structured data that the execution engine can understand.
-
+Version 2.1
 
 Pipeline:
 
 SQL Text
+
+↓
+
+Lexer
+
+↓
+
+Tokens
 
 ↓
 
@@ -27,6 +33,10 @@ Parser
 ↓
 
 Query Structure
+
++
+
+Abstract Syntax Tree
 
 
 ============================================================
@@ -37,11 +47,11 @@ Query Structure
 #define PARSER_H
 
 
+#include "lexer.h"
+#include "ast.h"
 
-#define MAX_QUERY_LENGTH 256
 
 #define MAX_COLUMN_LENGTH 50
-
 
 
 
@@ -50,22 +60,8 @@ Query Structure
 
 Operators
 
-Represents logical comparison operations.
-
-
-Example:
-
-grade > 80
-
-
-Operator:
-
-GREATER_THAN
-
-
 ============================================================
 */
-
 
 typedef enum
 {
@@ -82,34 +78,14 @@ typedef enum
 
 
 
-
-
-
 /*
 ============================================================
 
-Predicate Structure
-
-
-Represents:
-
-WHERE condition
-
+Predicate
 
 Example:
 
-
 grade > 80
-
-
-becomes:
-
-
-column = grade
-
-operator = >
-
-value = 80
 
 
 ============================================================
@@ -119,15 +95,11 @@ value = 80
 typedef struct
 {
 
-
     char column[MAX_COLUMN_LENGTH];
-
 
     Operator operator;
 
-
     int value;
-
 
 
 } Predicate;
@@ -135,36 +107,17 @@ typedef struct
 
 
 
-
-
-
 /*
 ============================================================
 
-Query Structure
+Query
 
+Compatibility layer.
 
-Represents the complete query.
+The execution engine currently
+uses this representation.
 
-
-Example:
-
-
-SELECT name WHERE grade > 80
-
-
-becomes:
-
-
-projection:
-
-name
-
-
-predicate:
-
-grade > 80
-
+Future versions execute AST directly.
 
 ============================================================
 */
@@ -173,12 +126,9 @@ grade > 80
 typedef struct
 {
 
-
     char projection[MAX_COLUMN_LENGTH];
 
-
     Predicate condition;
-
 
 
 } Query;
@@ -186,41 +136,34 @@ typedef struct
 
 
 
-
-
 /*
 ============================================================
 
-Parser Functions
-
+Parser API
 
 ============================================================
 */
 
 
-/*
-Parses SQL-style query text.
-
-Returns a structured Query object.
-
-*/
 Query parse_query(
         char* input
 );
 
 
 
+Query parse_tokens(
+        TokenStream tokens
+);
 
-/*
-Displays parsed query.
 
-Useful for debugging.
 
-*/
 void print_query(
         Query query
 );
 
+
+
+ASTNode* get_latest_ast(void);
 
 
 

@@ -8,18 +8,14 @@ File:
 executor.c
 
 
+Version:
+
+2.2
+
+
 Purpose:
 
-Implements relational algebra operations.
-
-
-Concepts:
-
-- Predicate logic
-- Sets
-- Relations
-- Selection
-- Projection
+Executes relational algebra operations.
 
 
 ============================================================
@@ -36,27 +32,14 @@ Concepts:
 
 
 
+
 /*
 ============================================================
 
 Evaluate Predicate
 
-
-Mathematical form:
-
-
-P(tuple)
-
-
-Example:
-
-
-grade > 80
-
-
 ============================================================
 */
-
 
 int evaluate_predicate(
         Tuple tuple,
@@ -65,57 +48,37 @@ int evaluate_predicate(
 {
 
 
-    if(
-        strcmp(
-            predicate.column,
-            "grade"
-        ) != 0
-    )
-    {
-
-        return 0;
-
-    }
-
-
-
-
-
     switch(predicate.operator)
     {
 
 
         case OP_GREATER_THAN:
 
-
-            return tuple.grade > predicate.value;
-
+            return tuple.grade >
+                   predicate.value;
 
 
 
         case OP_LESS_THAN:
 
-
-            return tuple.grade < predicate.value;
-
+            return tuple.grade <
+                   predicate.value;
 
 
 
         case OP_EQUAL:
 
+            return tuple.grade ==
+                   predicate.value;
 
-            return tuple.grade == predicate.value;
-
-
-
-        default:
-
-            return 0;
 
     }
 
 
+    return 0;
+
 }
+
 
 
 
@@ -128,14 +91,7 @@ int evaluate_predicate(
 
 Selection
 
-
-Relational algebra:
-
-
-σ predicate(Relation)
-
-
-Keeps only matching tuples.
+σ condition(Relation)
 
 
 ============================================================
@@ -151,43 +107,32 @@ Relation selection(
 
     Relation result =
         create_relation(
-            relation.relation_name
+            "Selection Result"
         );
 
 
 
-
-    for(
-        int i = 0;
-        i < relation.row_count;
-        i++
-    )
+    for(int i=0;
+        i<relation.row_count;
+        i++)
     {
 
 
-        Tuple current =
-            relation.rows[i];
-
-
-
         if(
-            evaluate_predicate(
-                current,
-                predicate
-            )
-        )
+        evaluate_predicate(
+            relation.rows[i],
+            predicate
+        ))
         {
 
 
             add_tuple(
                 &result,
-                current.name,
-                current.grade
+                relation.rows[i].name,
+                relation.rows[i].grade
             );
 
-
         }
-
 
     }
 
@@ -209,14 +154,7 @@ Relation selection(
 
 Projection
 
-
-Relational algebra:
-
-
-π name(Relation)
-
-
-Returns selected attributes.
+π attribute(Relation)
 
 
 ============================================================
@@ -237,23 +175,9 @@ Relation projection(
 
 
 
-    if(
-        strcmp(column,"name") != 0
-    )
-    {
-
-        return result;
-
-    }
-
-
-
-
-    for(
-        int i = 0;
-        i < relation.row_count;
-        i++
-    )
+    for(int i=0;
+        i<relation.row_count;
+        i++)
     {
 
 
@@ -278,35 +202,22 @@ Relation projection(
 
 
 
+
 /*
 ============================================================
 
-Execute Query
+Legacy Query Execution
 
 
-Complete database pipeline.
+Query
 
+↓
 
-Example:
+Selection
 
+↓
 
-SELECT name WHERE grade > 80
-
-
-Becomes:
-
-
-Selection:
-
-σ grade > 80(Student)
-
-
-then:
-
-
-Projection:
-
-π name(Result)
+Projection
 
 
 ============================================================
@@ -328,7 +239,7 @@ Relation execute_query(
 
 
 
-    Relation result =
+    Relation projected =
         projection(
             filtered,
             query.projection
@@ -336,6 +247,146 @@ Relation execute_query(
 
 
 
-    return result;
+    return projected;
+
+}
+
+
+
+
+
+
+
+
+
+
+/*
+============================================================
+
+AST Execution
+
+
+Currently supports:
+
+
+SELECT name WHERE grade > value
+
+
+AST:
+
+SELECT
+
+ |
+
+WHERE
+
+ |
+
+comparison
+
+
+============================================================
+*/
+
+
+Relation execute_ast(
+        Relation relation,
+        ASTNode* root
+)
+{
+
+
+    if(root == NULL)
+    {
+        return relation;
+    }
+
+
+
+
+
+    if(root->type == AST_SELECT)
+    {
+
+
+        ASTNode* where =
+            root->right;
+
+
+
+        ASTNode* comparison =
+            where->left;
+
+
+
+        Predicate predicate;
+
+
+
+        strcpy(
+            predicate.column,
+            comparison->left->value
+        );
+
+
+
+        predicate.value =
+            atoi(
+                comparison->right->value
+            );
+
+
+
+        switch(
+        comparison->type)
+        {
+
+
+            case AST_GREATER_THAN:
+
+                predicate.operator =
+                    OP_GREATER_THAN;
+
+                break;
+
+
+
+            case AST_LESS_THAN:
+
+                predicate.operator =
+                    OP_LESS_THAN;
+
+                break;
+
+
+
+            default:
+
+                predicate.operator =
+                    OP_EQUAL;
+
+        }
+
+
+
+
+        Relation result =
+            selection(
+                relation,
+                predicate
+            );
+
+
+
+        return projection(
+            result,
+            root->left->value
+        );
+
+    }
+
+
+
+    return relation;
 
 }
