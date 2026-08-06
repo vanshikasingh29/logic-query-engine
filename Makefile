@@ -25,7 +25,6 @@ OUTPUT=query_engine
 
 
 
-
 all:
 
 	$(CC) $(CFLAGS) $(SRC) -I$(INCLUDE) -o $(OUTPUT)
@@ -40,10 +39,39 @@ run:
 
 clean:
 
-	rm -f $(OUTPUT)
+	rm -f $(OUTPUT) test_engine
 
 
 
 debug:
 
 	gdb ./$(OUTPUT)
+
+
+
+
+
+##################################################
+# Test Suite
+##################################################
+
+
+TEST_SRC=tests/test_engine.c \
+src/relation.c \
+src/executor.c \
+src/parser.c \
+src/lexer.c \
+src/ast.c
+
+
+
+TEST_OUTPUT=test_engine
+
+
+
+
+test:
+
+	$(CC) $(CFLAGS) $(TEST_SRC) -I$(INCLUDE) -o $(TEST_OUTPUT)
+
+	./$(TEST_OUTPUT)
