@@ -390,3 +390,61 @@ Relation execute_ast(
     return relation;
 
 }
+/*
+============================================================
+
+Expression Execution
+
+
+Executes Boolean predicate trees.
+
+
+============================================================
+*/
+
+
+Relation execute_expression(
+        Relation relation,
+        ExpressionNode* expression
+)
+{
+
+
+    Relation result =
+        create_relation(
+            "Expression Result"
+        );
+
+
+
+    for(int i=0;
+        i < relation.row_count;
+        i++)
+    {
+
+
+        if(
+        evaluate_expression(
+            expression,
+            relation.rows[i].grade
+        ))
+        {
+
+
+            add_tuple(
+                &result,
+                relation.rows[i].name,
+                relation.rows[i].grade
+            );
+
+
+        }
+
+
+    }
+
+
+
+    return result;
+
+}

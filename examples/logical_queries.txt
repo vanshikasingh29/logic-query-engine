@@ -1,0 +1,13 @@
+Basic query:
+
+SELECT name WHERE grade > 80
+
+
+
+Future supported:
+
+
+SELECT name WHERE grade > 80 AND grade < 95
+
+
+SELECT name WHERE grade = 100 OR grade > 90

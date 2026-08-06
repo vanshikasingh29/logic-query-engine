@@ -144,8 +144,6 @@ Relation execute_query(
 
 
 
-
-
 /*
 ============================================================
 
@@ -164,7 +162,43 @@ Relation execute_ast(
         Relation relation,
         ASTNode* root
 );
+#ifndef EXECUTOR_H
+#define EXECUTOR_H
 
+
+#include "relation.h"
+#include "parser.h"
+#include "ast.h"
+#include "expression.h"
+
+
+
+
+Relation execute_query(
+        Relation relation,
+        Query query
+);
+
+
+
+
+Relation execute_ast(
+        Relation relation,
+        ASTNode* root
+);
+
+
+
+
+Relation execute_expression(
+        Relation relation,
+        ExpressionNode* expression
+);
+
+
+
+
+#endif
 
 
 #endif
