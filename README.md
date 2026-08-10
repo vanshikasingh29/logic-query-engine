@@ -106,23 +106,23 @@ Discrete Mathematics
 
         ↓
 
-Logic
+       Logic
 
         ↓
 
-Sets
+       Sets
 
         ↓
 
-Relations
+    Relations
 
         ↓
 
-Graph Thinking
+   Graph Thinking
 
         ↓
 
-Automata Concepts
+  Automata Concepts
 
 ```
 
@@ -192,7 +192,7 @@ Example:
 
 Human Query:
 
-```sql
+```
 SELECT name
 WHERE grade > 80;
 ```
@@ -235,25 +235,21 @@ The engine follows this pipeline:
               SQL Query
 
                   |
-
                   v
 
              Query Parser
 
                   |
-
                   v
 
         Logical Representation
 
                   |
-
                   v
 
         Relational Algebra Engine
 
                   |
-
                   v
 
              Result Set
