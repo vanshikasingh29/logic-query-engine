@@ -22,7 +22,7 @@ Modern databases appear simple from the outside.
 
 A user writes:
 
-```sql
+```
 SELECT name
 WHERE grade > 80;
 ```
@@ -93,7 +93,7 @@ This project is an engineering application of concepts studied in:
 Learning Repository:
 
 ```
-[INSERT CS FROM FIRST PRINCIPLES LINK HERE]
+https://github.com/vanshikasingh29/CS-from-first-principle.git
 ```
 
 
