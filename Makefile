@@ -21,72 +21,99 @@ src/binary_relation.c
 
 OUTPUT=query_engine
 
-TEST_OUTPUT=test_engine
 
-SET_TEST_OUTPUT=set_tests
+TEST_ENGINE=test_engine
 
-RELATION_TEST_OUTPUT=relation_tests
+SET_TESTS=set_tests
+
+RELATION_TESTS=relation_tests
+
+FUNCTION_TESTS=function_tests
 
 
-TEST_SRC=tests/test_engine.c
+TEST_ENGINE_SRC=tests/test_engine.c \
+src/relation.c \
+src/executor.c \
+src/parser.c \
+src/lexer.c \
+src/ast.c
 
-SET_TEST_SRC=tests/test_sets.c
 
-RELATION_TEST_SRC=tests/test_binary_relation.c
+SET_TEST_SRC=tests/test_sets.c \
+src/set.c \
+src/relation.c
+
+
+RELATION_TEST_SRC=tests/test_binary_relation.c \
+src/binary_relation.c
+
+
+FUNCTION_TEST_SRC=tests/test_functions.c \
+src/function.c
 
 
 all:
+
 	$(CC) $(CFLAGS) $(SRC) -I$(INCLUDE) -o $(OUTPUT)
 
 
 run:
+
 	./$(OUTPUT)
 
 
-test:
-	$(CC) $(CFLAGS) \
-	$(TEST_SRC) \
-	src/relation.c \
-	src/executor.c \
-	src/parser.c \
-	src/lexer.c \
-	src/ast.c \
-	-I$(INCLUDE) \
-	-o $(TEST_OUTPUT)
+test-engine:
 
-	./$(TEST_OUTPUT)
+	$(CC) $(CFLAGS) \
+	$(TEST_ENGINE_SRC) \
+	-I$(INCLUDE) \
+	-o $(TEST_ENGINE)
+
+	./$(TEST_ENGINE)
 
 
 test-sets:
+
 	$(CC) $(CFLAGS) \
 	$(SET_TEST_SRC) \
-	src/set.c \
-	src/relation.c \
 	-I$(INCLUDE) \
-	-o $(SET_TEST_OUTPUT)
+	-o $(SET_TESTS)
 
-	./$(SET_TEST_OUTPUT)
+	./$(SET_TESTS)
 
 
 test-relations:
+
 	$(CC) $(CFLAGS) \
 	$(RELATION_TEST_SRC) \
-	src/binary_relation.c \
 	-I$(INCLUDE) \
-	-o $(RELATION_TEST_OUTPUT)
+	-o $(RELATION_TESTS)
 
-	./$(RELATION_TEST_OUTPUT)
-
-
-test-all: test test-sets test-relations
+	./$(RELATION_TESTS)
 
 
-debug:
-	gdb ./$(OUTPUT)
+test-functions:
+
+	$(CC) $(CFLAGS) \
+	$(FUNCTION_TEST_SRC) \
+	-I$(INCLUDE) \
+	-o $(FUNCTION_TESTS)
+
+	./$(FUNCTION_TESTS)
+
+
+test-all: test-engine test-sets test-relations test-functions
 
 
 clean:
+
 	rm -f $(OUTPUT) \
-	$(TEST_OUTPUT) \
-	$(SET_TEST_OUTPUT) \
-	$(RELATION_TEST_OUTPUT)
+	$(TEST_ENGINE) \
+	$(SET_TESTS) \
+	$(RELATION_TESTS) \
+	$(FUNCTION_TESTS)
+
+
+debug:
+
+	gdb ./$(OUTPUT)
