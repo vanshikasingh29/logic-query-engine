@@ -16,7 +16,8 @@ src/expression.c \
 src/storage.c \
 src/optimiser.c \
 src/set.c \
-src/binary_relation.c
+src/binary_relation.c \
+src/function.c
 
 
 OUTPUT=query_engine
@@ -29,6 +30,8 @@ SET_TESTS=set_tests
 RELATION_TESTS=relation_tests
 
 FUNCTION_TESTS=function_tests
+
+ALGORITHM_TESTS=algorithm_tests
 
 
 TEST_ENGINE_SRC=tests/test_engine.c \
@@ -52,18 +55,19 @@ FUNCTION_TEST_SRC=tests/test_functions.c \
 src/function.c
 
 
-all:
+ALGORITHM_TEST_SRC=tests/test_algorithms.c \
+src/algorithms.c
 
+
+all:
 	$(CC) $(CFLAGS) $(SRC) -I$(INCLUDE) -o $(OUTPUT)
 
 
 run:
-
 	./$(OUTPUT)
 
 
 test-engine:
-
 	$(CC) $(CFLAGS) \
 	$(TEST_ENGINE_SRC) \
 	-I$(INCLUDE) \
@@ -73,7 +77,6 @@ test-engine:
 
 
 test-sets:
-
 	$(CC) $(CFLAGS) \
 	$(SET_TEST_SRC) \
 	-I$(INCLUDE) \
@@ -83,7 +86,6 @@ test-sets:
 
 
 test-relations:
-
 	$(CC) $(CFLAGS) \
 	$(RELATION_TEST_SRC) \
 	-I$(INCLUDE) \
@@ -93,7 +95,6 @@ test-relations:
 
 
 test-functions:
-
 	$(CC) $(CFLAGS) \
 	$(FUNCTION_TEST_SRC) \
 	-I$(INCLUDE) \
@@ -102,18 +103,26 @@ test-functions:
 	./$(FUNCTION_TESTS)
 
 
-test-all: test-engine test-sets test-relations test-functions
+test-algorithms:
+	$(CC) $(CFLAGS) \
+	$(ALGORITHM_TEST_SRC) \
+	-I$(INCLUDE) \
+	-o $(ALGORITHM_TESTS)
+
+	./$(ALGORITHM_TESTS)
+
+
+test-all: test-engine test-sets test-relations test-functions test-algorithms
 
 
 clean:
-
 	rm -f $(OUTPUT) \
 	$(TEST_ENGINE) \
 	$(SET_TESTS) \
 	$(RELATION_TESTS) \
-	$(FUNCTION_TESTS)
+	$(FUNCTION_TESTS) \
+	$(ALGORITHM_TESTS)
 
 
 debug:
-
 	gdb ./$(OUTPUT)
