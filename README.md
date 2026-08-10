@@ -9,7 +9,7 @@
 ![Language](https://img.shields.io/badge/Language-C17-blue)
 ![Focus](https://img.shields.io/badge/Focus-Database%20Systems-green)
 ![Theory](https://img.shields.io/badge/Foundation-Discrete%20Mathematics-purple)
-![Status](https://img.shields.io/badge/Status-%20Iterating-orange)
+![Status](https://img.shields.io/badge/Status-%20Completed-orange)
 
 </div>
 
