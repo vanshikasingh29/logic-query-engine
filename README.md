@@ -452,6 +452,51 @@ Implements ideas from:
 
 
 ---
+# Mathematical Model
+
+A relation can be viewed as a set of tuples.
+
+For the student relation:
+```
+Student(Name, Grade)
+```
+each row is a tuple:
+```
+(Alice, 95)
+(Bob, 72)
+(Charlie, 88)
+```
+A predicate defines a condition over tuples:
+```
+P(x) = x.grade > 80
+```
+Selection retains only tuples for which the predicate evaluates to true:
+```
+σ grade > 80 (Student)
+```
+Projection then selects the requested attribute:
+```
+π name (...)
+```
+This is the mathematical foundation behind the query execution implemented by the engine.
+
+# Testing
+
+The project contains automated tests for the major implemented components.
+
+Current test coverage includes:
+```
+Core Query Engine       5 tests
+Set Theory              8 tests
+Binary Relations        9 tests
+Functions               8 tests
+Algorithms             10 tests
+
+Total:
+
+40 automated tests
+```
+The test suites validate both individual mathematical operations and core query-processing behaviour.
 
 # Technologies
 
@@ -685,58 +730,6 @@ Execution Engine
 Result Relation
 ```
 Although simplified for educational purposes, this architecture reflects the same conceptual stages used in production database engines.
-
----
-
-# Engineering Principle
-
-
-> Great software systems are built from mathematical ideas transformed into practical algorithms.
-
----
-
-# Connection To CS From First Principles
-
-
-This project is an engineering application of my independent Computer Science foundation journey.
-
-
-Learning:
-
-
-CS From First Principles
-
-↓
-
-Module 1: Discrete Mathematics
-
-↓
-
-Logic
-
-↓
-
-Sets
-
-↓
-
-Relations
-
-↓
-
-Relational Algebra
-
-
-Applied:
-
-
-↓
-
-Logic Query Engine
-
-
-The purpose was to transform mathematical theory into a working software system.
-
 
 ---
 
