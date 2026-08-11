@@ -80,6 +80,7 @@ This project demonstrates:
 - software architecture.
 
 The project connects:
+
 ```
 Logic
   ↓
@@ -94,7 +95,7 @@ Query Processing
 Database Systems
 ```
 Rather than treating SQL and databases as black boxes, this project reconstructs a simplified version of the underlying pipeline.
----
+
 
 # Connection To CS From First Principles
 
@@ -256,144 +257,162 @@ Supporting components include:
 The architecture deliberately separates responsibilities so that individual components can be reasoned about, tested and extended independently.
 
 ---
+# Implemented Components
+## Lexical Analysis
+The lexer converts query text into a stream of tokens.
 
-# Core Concepts Implemented
+Conceptually:
+```
+SELECT name WHERE grade > 80
 
+        ↓
 
-## Predicate Logic
+SELECT
+IDENTIFIER
+WHERE
+IDENTIFIER
+GREATER_THAN
+NUMBER
+```
+This establishes the lexical foundation required before syntactic analysis.
 
+## Parser
 
-A database condition:
+The parser consumes the token stream and constructs a structured representation of the query.
 
+###### Example:
+```
+SELECT name WHERE grade > 80
 
+        ↓
+
+Abstract Syntax Tree
+Abstract Syntax Tree
+```
+The AST represents the logical structure of a query independently of its original textual form.
+
+###### Example:
+```
+SELECT
+ ├── PROJECTION: name
+ └── WHERE
+      └── >
+          ├── grade
+          └── 80
+```
+
+This representation provides the bridge between parsing and execution.
+
+## Logical Query Planner
+
+The planner converts the AST into a logical query plan.
+
+The resulting plan represents the operations required to answer the query before execution begins.
+
+```
+AST
+ ↓
+Logical Plan
+ ↓
+Execution
+Relational Execution
+```
+The executor implements relational operations over in-memory relations.
+
+Implemented concepts include:
+
+- selection
+- projection
+- predicate evaluation
+- relation processing
+- result construction
+
+## Set Operations
+The engine also contains a mathematical set layer supporting operations over relations.
+
+Implemented operations include:
+
+- union
+- intersection
+- difference
+- distinctness
+- membership reasoning
+
+These operations connect the mathematical definition of sets with database-style relations.
+
+## Binary Relations
+
+The project includes an explicit binary relation implementation supporting analysis of properties such as:
+
+- ordered-pair membership
+- reflexivity
+- symmetry
+- antisymmetry
+- transitivity
+- equivalence relations
+- relation composition
+
+This provides a direct implementation of relation theory studied during the mathematical foundations phase.
+
+## Functions
+
+The mathematical function layer demonstrates:
+
+- function construction
+= function application
+- injectivity
+- surjectivity
+- bijectivity
+- composition
+- invalid composition detection.
+
+## Recursive Algorithms
+
+The project also contains small algorithmic implementations used to connect mathematical reasoning with executable computation.
+
+Implemented examples include:
+
+- factorial
+- Fibonacci
+- recursive array summation
+  - binary search
+
+These are independently tested rather than being mixed into the database execution path.
+
+###### Example Query
+
+Input:
+```
+SELECT name WHERE grade > 80
+```
+
+Example relation:
+```
+Name      Grade
+----------------
+Alice     95
+Bob       72
+Charlie   88
+David     91
+Emma      65
+Frank     100
+Grace     84
+Henry      76
+```
+Predicate:
 ```
 grade > 80
 ```
-
-
-is a logical predicate.
-
-
-Mathematically:
-
-
+Result:
 ```
-P(student)
-
-where:
-
-P(student) = student.grade > 80
-
+Name      Grade
+----------------
+Alice     95
+Charlie   88
+David     91
+Frank     100
+Grace     84
 ```
-
-
-The engine evaluates whether each record satisfies the predicate.
-
----
-
-# Relations
-
-
-A database table is a mathematical relation.
-
-
-Example:
-
-
-Student Relation:
-
-
-```
-Student(Name, Grade)
-
-```
-
-
-Represented as:
-
-
-```
-(Name × Grade)
-
-```
-
-
-Each row is a tuple within the relation.
-
----
-
-# Sets
-
-
-Query results are sets of valid records.
-
-
-Example:
-
-
-```
-Result =
-
-{
- Alice,
- Charlie
-}
-
-```
-
-
-The engine performs operations over collections of data.
-
----
-
-# Relational Algebra
-
-
-The project implements concepts from relational algebra:
-
-
-## Selection
-
-
-Filtering rows:
-
-
-```
-σ condition(Relation)
-
-```
-
-
-Example:
-
-
-```
-σ grade > 80(Student)
-
-```
-
-
-
-## Projection
-
-
-Selecting attributes:
-
-
-```
-π attribute(Relation)
-
-```
-
-
-Example:
-
-
-```
-π name(Student)
-
-```
-
 ---
 
 # Features
