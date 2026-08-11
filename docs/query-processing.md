@@ -2,9 +2,9 @@
 
 ## Overview
 
-A database query engine transforms a high-level human request into low-level operations.
+Query processing is the transformation of a declarative query into executable operations over data.
 
-This project models that process.
+The Logic Query Engine implements this process as a sequence of stages.
 
 The execution pipeline:
 
@@ -32,6 +32,12 @@ Execution Engine
 Result
 
 ```
+
+A database query engine transforms a high-level human request into low-level operations.
+
+This project models that process.
+
+
 
 ---
 
