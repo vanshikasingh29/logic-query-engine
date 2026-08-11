@@ -2,31 +2,31 @@
 
 # Logic Query Engine
 
-### A miniature relational database engine built from first principles using C.
+### A miniature relational query engine built from first principles in C17.
 
-<br>
-
-![Language](https://img.shields.io/badge/Language-C17-blue)
-![Focus](https://img.shields.io/badge/Focus-Database%20Systems-green)
-![Theory](https://img.shields.io/badge/Foundation-Discrete%20Mathematics-purple)
-![Status](https://img.shields.io/badge/Status-%20Completed-orange)
+[![Language](https://img.shields.io/badge/Language-C17-blue)](https://en.wikipedia.org/wiki/C17_(C_standard_revision))
+[![Domain](https://img.shields.io/badge/Domain-Database%20Systems-green)](https://en.wikipedia.org/wiki/Database)
+[![Foundations](https://img.shields.io/badge/Foundation-Discrete%20Mathematics-purple)](https://en.wikipedia.org/wiki/Discrete_mathematics)
+[![Tests](https://img.shields.io/badge/Tests-Passing-brightgreen)](#testing)
+[![Status](https://img.shields.io/badge/Status-Completed-orange)](#project-status)
 
 </div>
-
 
 ---
 
 # Project Overview
 
-Modern databases appear simple from the outside.
+The Logic Query Engine is a miniature relational query processing system implemented in **C17 from first principles**.
 
-A user writes:
+The project explores how a high-level query can be transformed into structured computational operations over relational data.
 
-```
+A query such as:
+
+```sql
 SELECT name
-WHERE grade > 80;
+WHERE grade > 80
 ```
-
+---
 and receives:
 
 ```
@@ -68,7 +68,7 @@ This project explores these foundations by implementing a simplified SQL-style q
 
 # Mission Statement
 
-> To understand how mathematical concepts such as logic, sets, and relations become the foundation of modern database systems.
+> Understand how the mathematical foundations of discrete mathematics become concrete algorithms and software architecture inside a database system.
 
 This project demonstrates:
 
@@ -79,6 +79,21 @@ This project demonstrates:
 - query processing,
 - software architecture.
 
+The project connects:
+```
+Logic
+  ↓
+Sets
+  ↓
+Relations
+  ↓
+Relational Algebra
+  ↓
+Query Processing
+  ↓
+Database Systems
+```
+Rather than treating SQL and databases as black boxes, this project reconstructs a simplified version of the underlying pipeline.
 ---
 
 # Connection To CS From First Principles
