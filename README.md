@@ -99,54 +99,33 @@ Rather than treating SQL and databases as black boxes, this project reconstructs
 # Connection To CS From First Principles
 
 
-This project is an engineering application of concepts studied in:
+This repository is the Phase 1 engineering portfolio project for my independent Computer Science foundations programme.
 
-
-# CS From First Principles
-
-
-Learning Repository:
-
+Learning repository:
 ```
 https://github.com/vanshikasingh29/CS-from-first-principle.git
 ```
 
 
-Relevant topics:
-
+The corresponding mathematical foundations include:
 ```
-Module 1
-
 Discrete Mathematics
-
-        ↓
-
-       Logic
-
-        ↓
-
-       Sets
-
-        ↓
-
-    Relations
-
-        ↓
-
-   Graph Thinking
-
-        ↓
-
-  Automata Concepts
-
+       ↓
+Logic
+       ↓
+Sets
+       ↓
+Relations
+       ↓
+Functions
+       ↓
+Relational Algebra
+       ↓
+Query Processing
 ```
+The learning repository contains the individual theoretical and practical laboratories.
 
-
-The learning repository focuses on understanding the mathematical foundations.
-
-This project applies those ideas by creating a working query processing system.
-
----
+This repository acts as the larger engineering application of those foundations.
 
 ---
 
@@ -237,6 +216,7 @@ Final Result:
 
 {name = Charlie}
 ```
+The implementation therefore connects a concrete programming system with the mathematical model underneath relational databases.
 
 ---
 
@@ -248,29 +228,32 @@ The engine follows this pipeline:
 
 ```
               SQL Query
-
-                  |
                   v
 
              Query Parser
-
-                  |
                   v
 
         Logical Representation
-
-                  |
                   v
 
         Relational Algebra Engine
-
-                  |
                   v
 
-             Result Set
+              Result Set
 
 ```
+Supporting components include:
 
+- Storage
+- Relations
+- Sets
+- Binary Relations
+- Functions
+- Expression Evaluation
+- Optimisation
+- Testing
+
+The architecture deliberately separates responsibilities so that individual components can be reasoned about, tested and extended independently.
 
 ---
 
