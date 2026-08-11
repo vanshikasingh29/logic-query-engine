@@ -1,24 +1,35 @@
-# Compiled binaries
-*.out
-*.exe
+# Build artefacts
+query_engine
+test_engine
+set_tests
+relation_tests
+function_tests
+algorithm_tests
+
+# Debugging
+*.dSYM/
+*.stackdump
+core
+core.*
 
 # Object files
 *.o
+*.obj
+*.a
 
-# Debug files
-*.dSYM/
-
-# Build folders
+# Build directories
 build/
+bin/
 
-# IDE files
+# Editor / IDE files
 .vscode/
-
 .idea/
+
+# OS files
+.DS_Store
+Thumbs.db
 
 # Temporary files
 *.tmp
-*.log
-
-# Test binaries
-query_tests
+*.swp
+*~
