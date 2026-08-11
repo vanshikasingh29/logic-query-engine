@@ -732,23 +732,35 @@ Result Relation
 Although simplified for educational purposes, this architecture reflects the same conceptual stages used in production database engines.
 
 ---
+## Limitations
 
-# Portfolio Significance
+This project is not intended to compete with production database systems.
 
+It currently does not attempt to provide:
 
-This project demonstrates:
+- persistent transactional storage
+- concurrency control
+- crash recovery
+- production indexing
+- distributed execution
+- cost-based query optimisation
+- full SQL compatibility
 
+These limitations are intentional. The project focuses on understanding the fundamental abstractions and algorithms that larger systems build upon.
 
-✓ Understanding of database foundations
+## Portfolio Significance
 
-✓ Applying mathematical reasoning to software
+This project demonstrates the ability to:
 
-✓ Building systems from first principles
+✓ translate mathematical definitions into executable code,
+✓ design a modular systems architecture,
+✓ implement a query-processing pipeline,
+✓ reason about relations and sets computationally,
+✓ build and test C software,
+✓ document engineering decisions,
+✓ connect theoretical Computer Science with practical systems engineering.
 
-✓ Designing modular software architecture
-
-✓ Connecting theory with engineering
-
+It serves as the Phase 1 capstone of my independent Computer Science foundations programme.
 
 ---
 
